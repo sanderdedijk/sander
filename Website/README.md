@@ -1,2 +1,0 @@
-# sanderdedijk.github.io
- Website
