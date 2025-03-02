@@ -8,10 +8,23 @@
   body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
   .container { display: inline-block; text-align: left; width: 300px; }
   input, button { margin: 10px 0; padding: 10px; font-size: 16px; display: block; width: 100%; box-sizing: border-box; }
-  .small-input { width: 60px; display: block; margin: 10px auto; text-align: center; appearance: none; -moz-appearance: textfield; }
+  .small-input { width: 65px; display: block; margin: 10px auto; text-align: center; appearance: none; -moz-appearance: textfield; }
   .small-input::-webkit-outer-spin-button, 
   .small-input::-webkit-inner-spin-button { display: none; margin: 0; }
   .result { margin-top: 20px; font-weight: bold; }
+
+  /* Stijl voor de gegenereerde begindruk */
+  .begindruk-box {
+    margin-top: 20px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #f0f8ff;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    display: none; /* Verborgen totdat er een waarde is */
+    text-align: center;
+  }
 </style>
 <script>
 let begindruk;
@@ -30,7 +43,13 @@ function generateBegindruk() {
     begindruk = Math.floor(Math.random() * (max - min) + min);
   }
 
-  alert(`De begindruk is: ${begindruk} BAR`);
+  // Reset het invoerveld
+  document.getElementById("userInput").value = "";
+
+  // Toon de begindruk op de pagina
+  const displayElement = document.getElementById("begindrukDisplay");
+  displayElement.innerHTML = `Gegenereerde Begindruk: <strong>${begindruk} BAR</strong>`;
+  displayElement.style.display = "block"; // Maak het zichtbaar
 }
 
 function setReservedruk() {
@@ -69,10 +88,16 @@ function checkResult() {
 <h1>Ademlucht Berekening Oefenen</h1>
 <div class="container">
   <button onclick="generateBegindruk()">Genereer Begindruk</button>
-  <input type="number" id="userInput" placeholder="Jouw berekende terugkeerdruk">
+  
+  <!-- Weergave van de begindruk -->
+  <div id="begindrukDisplay" class="begindruk-box"></div>
+  
+  <label>Jouw berekende terugkeerdruk:</label>
+  <input type="text" id="userInput" placeholder="Vul in" class="small-input">
   <button onclick="checkResult()">Controleer</button>
   <div id="result" class="result"></div>
-  <br><br><br>
+
+  <br><br>
   <label>Reservedruk (default: 55 BAR):</label>
   <input type="text" id="reservedrukInput" value="55" class="small-input">
   <button onclick="setReservedruk()">Pas Reservedruk Aan</button>
