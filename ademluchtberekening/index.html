@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ademlucht Berekening Oefenen</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+  .container { display: inline-block; text-align: left; width: 300px; }
+  input, button { margin: 10px 0; padding: 10px; font-size: 16px; display: block; width: 100%; box-sizing: border-box; }
+  .small-input { width: 60px; display: block; margin: 10px auto; text-align: center; appearance: none; -moz-appearance: textfield; }
+  .small-input::-webkit-outer-spin-button, 
+  .small-input::-webkit-inner-spin-button { display: none; margin: 0; }
+  .result { margin-top: 20px; font-weight: bold; }
+</style>
+<script>
+let begindruk;
+let reservedruk = 55;
+
+function generateBegindruk() {
+  const min = 300 * 0.9; // -10%
+  const max = 300 * 1.01; // +1%
+  const frequentRangeMin = 300 * 0.91; // -9%
+  const frequentRangeMax = 300 * 0.96; // -4%
+
+  const isFrequent = Math.random() < 0.7; // 70% kans voor -4% tot -9%
+  if (isFrequent) {
+    begindruk = Math.floor(Math.random() * (frequentRangeMax - frequentRangeMin) + frequentRangeMin);
+  } else {
+    begindruk = Math.floor(Math.random() * (max - min) + min);
+  }
+
+  alert(`De begindruk is: ${begindruk} BAR`);
+}
+
+function setReservedruk() {
+  const input = parseFloat(document.getElementById("reservedrukInput").value);
+  if (!isNaN(input) && input > 0) {
+    reservedruk = input;
+    alert(`Reservedruk is aangepast naar: ${reservedruk} BAR`);
+  } else {
+    alert("Vul een geldige waarde in voor de reservedruk.");
+  }
+}
+
+function checkResult() {
+  const userInput = parseFloat(document.getElementById("userInput").value);
+  if (isNaN(userInput)) {
+    alert("Vul een geldige waarde in.");
+    return;
+  }
+
+  const correcteDruk = (begindruk + reservedruk) / 2;
+  const afwijking = correcteDruk * 0.05;
+  const min = correcteDruk - afwijking;
+  const max = correcteDruk + afwijking;
+
+  document.getElementById("result").innerHTML = `Exact berekende terugkeerdruk: ${correcteDruk.toFixed(1)} BAR`;
+
+  if (userInput >= min && userInput <= max) {
+    document.getElementById("result").innerHTML += "<br>✅ Juiste berekening!";
+  } else {
+    document.getElementById("result").innerHTML += "<br>❌ Foutieve berekening.";
+  }
+}
+</script>
+</head>
+<body>
+<h1>Ademlucht Berekening Oefenen</h1>
+<div class="container">
+  <button onclick="generateBegindruk()">Genereer Begindruk</button>
+  <input type="number" id="userInput" placeholder="Jouw berekende terugkeerdruk">
+  <button onclick="checkResult()">Controleer</button>
+  <div id="result" class="result"></div>
+  <br><br><br>
+  <label>Reservedruk (default: 55 BAR):</label>
+  <input type="text" id="reservedrukInput" value="55" class="small-input">
+  <button onclick="setReservedruk()">Pas Reservedruk Aan</button>
+</div>
+</body>
+</html>
