@@ -11,7 +11,7 @@
   
   /* Zelfde stijl voor beide invoervelden */
   .small-input { 
-    width: 60px; 
+    width: 65px; 
     display: block; 
     margin: 10px auto; 
     text-align: center; 
@@ -54,7 +54,7 @@ function generateBegindruk() {
   const frequentRangeMin = 300 * 0.91; // -9%
   const frequentRangeMax = 300 * 0.96; // -4%
 
-  const isFrequent = Math.random() < 0.7; // 70% kans voor -4% tot -9%
+  const isFrequent = Math.random() < 0.5; // 50% kans voor -4% tot -9%
   if (isFrequent) {
     begindruk = Math.floor(Math.random() * (frequentRangeMax - frequentRangeMin) + frequentRangeMin);
   } else {
