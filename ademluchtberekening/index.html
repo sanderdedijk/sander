@@ -100,7 +100,7 @@ function checkResult() {
     `Exact berekende terugkeerdruk = <strong>${correcteDruk.toFixed(1)}&nbsp;BAR</strong>`;
 
   if (userInput >= min && userInput <= max) {
-    document.getElementById("result").innerHTML += "<br>✅ Juiste berekening! Jouw uitkomst ligt binnen 3% van de exacte uitkomst.";
+    document.getElementById("result").innerHTML += "<br>✅ Juiste berekening! Jouw uitkomst ligt binnen de +3% van de exacte uitkomst.";
   } else {
     document.getElementById("result").innerHTML += "<br>❌ Helaas jouw uitkomst ligt te ver af van de exacte uitkomst. Probeer het nog eens!";
   }
