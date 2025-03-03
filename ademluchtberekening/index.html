@@ -9,7 +9,7 @@
   .container { display: inline-block; text-align: left; width: 350px; }
   input, button { margin: 10px 0; padding: 10px; font-size: 16px; display: block; width: 100%; box-sizing: border-box; }
   
-  /* Zelfde stijl voor beide invoervelden */
+  /* Same style for both input fields */
   .small-input { 
     width: 65px; 
     display: block; 
@@ -21,27 +21,27 @@
   .small-input::-webkit-outer-spin-button, 
   .small-input::-webkit-inner-spin-button { display: none; margin: 0; }
 
-  /* Weergave van de gegenereerde begindruk */
+  /* Display of the generated start pressure */
   .begindruk-box {
     margin-top: 20px;
-    margin-bottom: 20px; /* Extra ruimte onder begindruk */
+    margin-bottom: 20px; /* Extra space below start pressure */
     padding: 15px;
     font-size: 18px;
     font-weight: bold;
     background-color: #f0f8ff;
     border: 2px solid #007bff;
     border-radius: 8px;
-    display: none; /* Verborgen totdat er een waarde is */
+    display: none; /* Hidden until a value is set */
     text-align: center;
   }
 
-  /* Zorgt ervoor dat de berekende druk niet te snel afbreekt */
+  /* Ensures the calculated pressure does not break too quickly */
   .result { 
     margin-top: 20px; 
     font-weight: bold;
     width: 100%;
-    max-width: 500px; /* Breder maken zodat BAR niet afbreekt */
-    display: inline-block; /* Voorkomt onnodige afbreking */
+    max-width: 500px; /* Wider to prevent BAR from breaking */
+    display: inline-block; /* Prevents unnecessary breaking */
   }
 </style>
 <script>
@@ -54,23 +54,23 @@ function generateBegindruk() {
   const frequentRangeMin = 300 * 0.91; // -9%
   const frequentRangeMax = 300 * 0.96; // -4%
 
-  const isFrequent = Math.random() < 0.2; // 20% kans voor -4% tot -9%
+  const isFrequent = Math.random() < 0.2; // 20% chance for -4% to -9%
   if (isFrequent) {
     begindruk = Math.floor(Math.random() * (frequentRangeMax - frequentRangeMin) + frequentRangeMin);
   } else {
     begindruk = Math.floor(Math.random() * (max - min) + min);
   }
 
-  // Reset het invoerveld van de gebruiker
+  // Reset the user's input field
   document.getElementById("userInput").value = "";
 
-  // Wis het vorige resultaat
+  // Reset result
   document.getElementById("result").innerHTML = "";
 
-  // Toon de gegenereerde begindruk op de pagina
+  // Display the generated start pressure on the page
   const displayElement = document.getElementById("begindrukDisplay");
   displayElement.innerHTML = `Gegenereerde begindruk: <strong>${begindruk} BAR</strong>`;
-  displayElement.style.display = "block"; // Maak het zichtbaar
+  displayElement.style.display = "block"; // Make it visible
 }
 
 function setReservedruk() {
@@ -92,10 +92,10 @@ function checkResult() {
 
   const correcteDruk = (begindruk + reservedruk) / 2;
   const afwijking = correcteDruk * 0.03;
-  const min = correcteDruk - afwijking;
+  const min = correcteDruk;
   const max = correcteDruk + afwijking;
 
-  // Voorkomen dat "BAR" op een nieuwe regel komt
+  // Prevent "BAR" from breaking onto a new line
   document.getElementById("result").innerHTML = 
     `Exact berekende terugkeerdruk = <strong>${correcteDruk.toFixed(1)}&nbsp;BAR</strong>`;
 
@@ -112,7 +112,7 @@ function checkResult() {
 <div class="container">
   <button onclick="generateBegindruk()">Genereer begindruk</button>
   
-  <!-- Weergave van de gegenereerde begindruk -->
+  <!-- Display of the generated start pressure -->
   <div id="begindrukDisplay" class="begindruk-box"></div>
   
   <label>Jouw berekende terugkeerdruk:</label>
