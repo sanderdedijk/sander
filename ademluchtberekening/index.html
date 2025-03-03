@@ -70,16 +70,16 @@ function checkResult() {
   }
 
   const correcteDruk = (begindruk + reservedruk) / 2;
-  const afwijking = correcteDruk * 0.05;
+  const afwijking = correcteDruk * 0.04;
   const min = correcteDruk - afwijking;
   const max = correcteDruk + afwijking;
 
   document.getElementById("result").innerHTML = `Exact berekende terugkeerdruk: ${correcteDruk.toFixed(1)} BAR`;
 
   if (userInput >= min && userInput <= max) {
-    document.getElementById("result").innerHTML += "<br>✅ Juiste berekening!";
+    document.getElementById("result").innerHTML += "<br>✅ Juiste berekening! Jouw uitkomst ligt binnen 4% van de exacte uitkomst";
   } else {
-    document.getElementById("result").innerHTML += "<br>❌ Foutieve berekening.";
+    document.getElementById("result").innerHTML += "<br>❌ Helaas jouw uitkomst ligt te ver af van de exacte uitkomst. Probeer het nog eens!";
   }
 }
 </script>
