@@ -88,7 +88,7 @@ function checkResult() {
   }
 
   const correcteDruk = (begindruk + reservedruk) / 2;
-  const afwijking = correcteDruk * 0.04;
+  const afwijking = correcteDruk * 0.03;
   const min = correcteDruk - afwijking;
   const max = correcteDruk + afwijking;
 
@@ -97,7 +97,7 @@ function checkResult() {
     `Exact berekende terugkeerdruk = <strong>${correcteDruk.toFixed(1)}&nbsp;BAR</strong>`;
 
   if (userInput >= min && userInput <= max) {
-    document.getElementById("result").innerHTML += "<br>✅ Juiste berekening! Jouw uitkomst ligt binnen 4% van de exacte uitkomst.";
+    document.getElementById("result").innerHTML += "<br>✅ Juiste berekening! Jouw uitkomst ligt binnen 3% van de exacte uitkomst.";
   } else {
     document.getElementById("result").innerHTML += "<br>❌ Helaas jouw uitkomst ligt te ver af van de exacte uitkomst. Probeer het nog eens!";
   }
