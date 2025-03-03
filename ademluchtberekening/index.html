@@ -6,16 +6,25 @@
 <title>Ademlucht Berekening Oefenen</title>
 <style>
   body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-  .container { display: inline-block; text-align: left; width: 300px; }
+  .container { display: inline-block; text-align: left; width: 350px; }
   input, button { margin: 10px 0; padding: 10px; font-size: 16px; display: block; width: 100%; box-sizing: border-box; }
-  .small-input { width: 65px; display: block; margin: 10px auto; text-align: center; appearance: none; -moz-appearance: textfield; }
+  
+  /* Zelfde stijl voor beide invoervelden */
+  .small-input { 
+    width: 60px; 
+    display: block; 
+    margin: 10px auto; 
+    text-align: center; 
+    appearance: none; 
+    -moz-appearance: textfield; 
+  }
   .small-input::-webkit-outer-spin-button, 
   .small-input::-webkit-inner-spin-button { display: none; margin: 0; }
-  .result { margin-top: 20px; font-weight: bold; }
 
-  /* Stijl voor de gegenereerde begindruk */
+  /* Weergave van de gegenereerde begindruk */
   .begindruk-box {
     margin-top: 20px;
+    margin-bottom: 20px; /* Extra ruimte onder begindruk */
     padding: 15px;
     font-size: 18px;
     font-weight: bold;
@@ -24,6 +33,15 @@
     border-radius: 8px;
     display: none; /* Verborgen totdat er een waarde is */
     text-align: center;
+  }
+
+  /* Zorgt ervoor dat de berekende druk niet te snel afbreekt */
+  .result { 
+    margin-top: 20px; 
+    font-weight: bold;
+    width: 100%;
+    max-width: 500px; /* Breder maken zodat BAR niet afbreekt */
+    display: inline-block; /* Voorkomt onnodige afbreking */
   }
 </style>
 <script>
@@ -43,10 +61,10 @@ function generateBegindruk() {
     begindruk = Math.floor(Math.random() * (max - min) + min);
   }
 
-  // Reset het invoerveld
+  // Reset het invoerveld van de gebruiker
   document.getElementById("userInput").value = "";
 
-  // Toon de begindruk op de pagina
+  // Toon de gegenereerde begindruk op de pagina
   const displayElement = document.getElementById("begindrukDisplay");
   displayElement.innerHTML = `Gegenereerde Begindruk: <strong>${begindruk} BAR</strong>`;
   displayElement.style.display = "block"; // Maak het zichtbaar
@@ -74,10 +92,12 @@ function checkResult() {
   const min = correcteDruk - afwijking;
   const max = correcteDruk + afwijking;
 
-  document.getElementById("result").innerHTML = `Exact berekende terugkeerdruk: ${correcteDruk.toFixed(1)} BAR`;
+  // Voorkomen dat "BAR" op een nieuwe regel komt
+  document.getElementById("result").innerHTML = 
+    `Exact berekende terugkeerdruk= <strong>${correcteDruk.toFixed(1)}&nbsp;BAR</strong>`;
 
   if (userInput >= min && userInput <= max) {
-    document.getElementById("result").innerHTML += "<br>✅ Juiste berekening! Jouw uitkomst ligt binnen 4% van de exacte uitkomst";
+    document.getElementById("result").innerHTML += "<br>✅ Juiste berekening! Jouw uitkomst ligt binnen 4% van de exacte uitkomst.";
   } else {
     document.getElementById("result").innerHTML += "<br>❌ Helaas jouw uitkomst ligt te ver af van de exacte uitkomst. Probeer het nog eens!";
   }
@@ -89,7 +109,7 @@ function checkResult() {
 <div class="container">
   <button onclick="generateBegindruk()">Genereer Begindruk</button>
   
-  <!-- Weergave van de begindruk -->
+  <!-- Weergave van de gegenereerde begindruk -->
   <div id="begindrukDisplay" class="begindruk-box"></div>
   
   <label>Jouw berekende terugkeerdruk:</label>
