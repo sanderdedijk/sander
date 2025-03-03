@@ -91,17 +91,16 @@ function checkResult() {
   }
 
   const correcteDruk = (begindruk + reservedruk) / 2;
+  const afgerondeCorrecteDruk = Math.floor(correcteDruk); // Rond de correcte druk naar beneden af
   const afwijking = correcteDruk * 0.03;
-  const min = correcteDruk;
+  const min = afgerondeCorrecteDruk;
   const max = correcteDruk + afwijking;
 
   // Prevent "BAR" from breaking onto a new line
   document.getElementById("result").innerHTML = 
     `Exact berekende terugkeerdruk = <strong>${correcteDruk.toFixed(1)}&nbsp;BAR</strong>`;
 
-  const afgerondeInput = Math.floor(userInput * 10) / 10; // Rond af naar beneden op 1 decimaal
-
-  if (afgerondeInput >= min && afgerondeInput <= max) {
+  if (userInput >= min && userInput <= max) {
     document.getElementById("result").innerHTML += "<br>✅ Goede berekening! Jouw uitkomst ligt binnen +3% van de exacte waarde.";
   } else {
     document.getElementById("result").innerHTML += "<br>❌ Helaas, jouw uitkomst is lager of juist te veel hoger dan de exacte berekening. Probeer het nog eens!";
