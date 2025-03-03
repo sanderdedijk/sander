@@ -54,7 +54,7 @@ function generateBegindruk() {
   const frequentRangeMin = 300 * 0.91; // -9%
   const frequentRangeMax = 300 * 0.96; // -4%
 
-  const isFrequent = Math.random() < 0.5; // 50% kans voor -4% tot -9%
+  const isFrequent = Math.random() < 0.2; // 20% kans voor -4% tot -9%
   if (isFrequent) {
     begindruk = Math.floor(Math.random() * (frequentRangeMax - frequentRangeMin) + frequentRangeMin);
   } else {
