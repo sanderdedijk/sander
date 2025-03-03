@@ -64,6 +64,9 @@ function generateBegindruk() {
   // Reset het invoerveld van de gebruiker
   document.getElementById("userInput").value = "";
 
+  // Wis het vorige resultaat
+  document.getElementById("result").innerHTML = "";
+
   // Toon de gegenereerde begindruk op de pagina
   const displayElement = document.getElementById("begindrukDisplay");
   displayElement.innerHTML = `Gegenereerde begindruk: <strong>${begindruk} BAR</strong>`;
