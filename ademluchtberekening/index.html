@@ -94,7 +94,7 @@ function checkResult() {
 
   // Voorkomen dat "BAR" op een nieuwe regel komt
   document.getElementById("result").innerHTML = 
-    `Exact berekende terugkeerdruk= <strong>${correcteDruk.toFixed(1)}&nbsp;BAR</strong>`;
+    `Exact berekende terugkeerdruk = <strong>${correcteDruk.toFixed(1)}&nbsp;BAR</strong>`;
 
   if (userInput >= min && userInput <= max) {
     document.getElementById("result").innerHTML += "<br>✅ Juiste berekening! Jouw uitkomst ligt binnen 4% van de exacte uitkomst.";
