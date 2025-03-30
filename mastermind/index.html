@@ -151,6 +151,7 @@
             let codeUsed = [false, false, false, false];
             let guessUsed = [false, false, false, false];
 
+            // First pass: check for exact matches (black pins)
             for (let i = 0; i < 4; i++) {
                 if (codeArr[i] === guessArr[i]) {
                     black++;
@@ -159,6 +160,7 @@
                 }
             }
 
+            // Second pass: check for color matches in wrong positions (white pins)
             for (let i = 0; i < 4; i++) {
                 if (!guessUsed[i]) {
                     for (let j = 0; j < 4; j++) {
