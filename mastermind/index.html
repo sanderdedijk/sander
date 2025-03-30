@@ -104,107 +104,128 @@
     </div>
     
     <script>
-        const colors = { 'R': 'red', 'G': 'green', 'B': 'blue', 'Y': 'yellow', 'O': 'orange', 'P': 'pink', 'S': 'gray', 'W': 'white' };
-        let currentGuess = [];
-        let possibleCodes = generateAllCodes();
-        
-        function addColor(color) {
-            if (currentGuess.length < 4) {
-                currentGuess.push(color);
-                updateGuessDisplay();
-            }
-        }
+const colors = { 'R': 'red', 'G': 'green', 'B': 'blue', 'Y': 'yellow', 'O': 'orange', 'P': 'pink', 'S': 'gray', 'W': 'white' };
+let currentGuess = [];
+let possibleCodes = generateAllCodes();
+let history = [];
+let turn = 0;
+const maxTurns = 12;
 
-        function updateGuessDisplay() {
-            for (let i = 0; i < 4; i++) {
-                let slot = document.getElementById(`slot${i + 1}`);
-                slot.style.backgroundColor = currentGuess[i] ? colors[currentGuess[i]] : 'white';
-            }
-            document.getElementById("guess").value = currentGuess.join('');
-        }
+function addColor(color) {
+    if (currentGuess.length < 4) {
+        currentGuess.push(color);
+        updateGuessDisplay();
+    }
+}
 
-        function updateSuggestionDisplay(code) {
-            for (let i = 0; i < 4; i++) {
-                let slot = document.getElementById(`suggestion${i + 1}`);
-                slot.style.backgroundColor = code ? colors[code[i]] : 'white';
-            }
-        }
+function updateGuessDisplay() {
+    for (let i = 0; i < 4; i++) {
+        let slot = document.getElementById(`slot${i + 1}`);
+        slot.style.backgroundColor = currentGuess[i] ? colors[currentGuess[i]] : 'white';
+    }
+    document.getElementById("guess").value = currentGuess.join('');
+}
 
-        function generateAllCodes() {
-            let codes = [];
-            for (let a of Object.keys(colors)) {
-                for (let b of Object.keys(colors)) {
-                    for (let c of Object.keys(colors)) {
-                        for (let d of Object.keys(colors)) {
-                            codes.push(`${a}${b}${c}${d}`);
-                        }
-                    }
+function updateSuggestionDisplay(code) {
+    for (let i = 0; i < 4; i++) {
+        let slot = document.getElementById(`suggestion${i + 1}`);
+        slot.style.backgroundColor = code ? colors[code[i]] : 'white';
+    }
+}
+
+function generateAllCodes() {
+    let codes = [];
+    let keys = Object.keys(colors);
+    for (let a of keys) {
+        for (let b of keys) {
+            for (let c of keys) {
+                for (let d of keys) {
+                    codes.push(`${a}${b}${c}${d}`);
                 }
             }
-            return codes;
         }
+    }
+    return codes;
+}
 
-        function getFeedback(code, guess) {
-            let black = 0, white = 0;
-            let codeArr = [...code];
-            let guessArr = [...guess];
-            let codeUsed = [false, false, false, false];
-            let guessUsed = [false, false, false, false];
-
-            // First pass: check for exact matches (black pins)
-            for (let i = 0; i < 4; i++) {
-                if (codeArr[i] === guessArr[i]) {
-                    black++;
-                    codeUsed[i] = true;
-                    guessUsed[i] = true;
+function getFeedback(code, guess) {
+    let black = 0, white = 0;
+    let codeArr = [...code];
+    let guessArr = [...guess];
+    let codeUsed = Array(4).fill(false);
+    let guessUsed = Array(4).fill(false);
+    
+    // Black pin calculation
+    for (let i = 0; i < 4; i++) {
+        if (codeArr[i] === guessArr[i]) {
+            black++;
+            codeUsed[i] = true;
+            guessUsed[i] = true;
+        }
+    }
+    
+    // White pin calculation
+    for (let i = 0; i < 4; i++) {
+        if (!guessUsed[i]) {
+            for (let j = 0; j < 4; j++) {
+                if (!codeUsed[j] && guessArr[i] === codeArr[j]) {
+                    white++;
+                    codeUsed[j] = true;
+                    break;
                 }
             }
-
-            // Second pass: check for color matches in wrong positions (white pins)
-            for (let i = 0; i < 4; i++) {
-                if (!guessUsed[i]) {
-                    for (let j = 0; j < 4; j++) {
-                        if (!codeUsed[j] && guessArr[i] === codeArr[j]) {
-                            white++;
-                            codeUsed[j] = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return { black, white };
         }
+    }
+    return { black, white };
+}
 
-        function processFeedback() {
-            let guess = document.getElementById("guess").value;
-            let black = parseInt(document.getElementById("black").value);
-            let white = parseInt(document.getElementById("white").value);
+function processFeedback() {
+    if (turn >= maxTurns) {
+        alert("Maximale beurten bereikt!");
+        return;
+    }
 
-            if (guess.length !== 4) {
-                alert("Voer een volledige code in!");
-                return;
-            }
+    let guess = document.getElementById("guess").value;
+    let black = parseInt(document.getElementById("black").value) || 0;
+    let white = parseInt(document.getElementById("white").value) || 0;
 
-            possibleCodes = possibleCodes.filter(code => {
-                let feedback = getFeedback(code, guess);
-                return feedback.black === black && feedback.white === white;
-            });
+    if (guess.length !== 4) {
+        alert("Voer een volledige code in!");
+        return;
+    }
 
-            let nextGuess = possibleCodes.length ? possibleCodes[0] : "";
-            updateSuggestionDisplay(nextGuess);
-            currentGuess = [];
-            updateGuessDisplay();
-        }
+    history.push({ guess, black, white });
+    turn++;
 
-        function resetGame() {
-            currentGuess = [];
-            possibleCodes = generateAllCodes();
-            document.getElementById("black").value = "";
-            document.getElementById("white").value = "";
-            updateSuggestionDisplay("");
-            updateGuessDisplay();
-        }
+    possibleCodes = possibleCodes.filter(code => {
+        let feedback = getFeedback(code, guess);
+        return feedback.black === black && feedback.white === white;
+    });
+
+    let nextGuess = possibleCodes.length ? possibleCodes[0] : "";
+    updateSuggestionDisplay(nextGuess);
+    updateHistoryDisplay();
+}
+
+function updateHistoryDisplay() {
+    let historyDiv = document.getElementById("history");
+    historyDiv.innerHTML = "";
+    history.forEach((entry, index) => {
+        historyDiv.innerHTML += `<p>Beurt ${index + 1}: ${entry.guess} - Zwart: ${entry.black}, Wit: ${entry.white}</p>`;
+    });
+}
+
+function resetGame() {
+    currentGuess = [];
+    possibleCodes = generateAllCodes();
+    history = [];
+    turn = 0;
+    document.getElementById("black").value = "";
+    document.getElementById("white").value = "";
+    updateSuggestionDisplay("");
+    updateGuessDisplay();
+    updateHistoryDisplay();
+}
     </script>
 </body>
 </html>
