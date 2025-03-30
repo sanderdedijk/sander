@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastermind Solver</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .input-group { margin: 10px; }
+        .color-btn { width: 50px; height: 50px; border: none; margin: 5px; cursor: pointer; }
+        .color-container { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .guess-display, .suggestion-display { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+        .guess-slot { width: 50px; height: 50px; border-radius: 50%; border: 2px solid black; background-color: white; }
+    </style>
+</head>
+<body>
+    <h1>Mastermind Solver</h1>
+    <p>Voer de feedback in (zwarte en witte pinnen) om de beste volgende gok te krijgen.</p>
+    
+    <div class="color-container">
+        <button class="color-btn" style="background-color: red;" onclick="addColor('R')"></button>
+        <button class="color-btn" style="background-color: green;" onclick="addColor('G')"></button>
+        <button class="color-btn" style="background-color: blue;" onclick="addColor('B')"></button>
+        <button class="color-btn" style="background-color: yellow;" onclick="addColor('Y')"></button>
+        <button class="color-btn" style="background-color: orange;" onclick="addColor('O')"></button>
+        <button class="color-btn" style="background-color: pink;" onclick="addColor('P')"></button>
+        <button class="color-btn" style="background-color: gray;" onclick="addColor('S')"></button>
+        <button class="color-btn" style="background-color: white;" onclick="addColor('W')"></button>
+    </div>
+    
+    <div class="guess-display">
+        <div class="guess-slot" id="slot1"></div>
+        <div class="guess-slot" id="slot2"></div>
+        <div class="guess-slot" id="slot3"></div>
+        <div class="guess-slot" id="slot4"></div>
+    </div>
+    
+    <input type="hidden" id="guess" value="">
+    
+    <div class="input-group">
+        <label for="black">Zwarte pinnen:</label>
+        <input type="number" id="black" min="0" max="4">
+    </div>
+    
+    <div class="input-group">
+        <label for="white">Witte pinnen:</label>
+        <input type="number" id="white" min="0" max="4">
+    </div>
+    
+    <button onclick="processFeedback()">Verwerk Feedback</button>
+    <button onclick="resetGame()">Herstel</button>
+    
+    <h2>Volgende suggestie:</h2>
+    <div class="suggestion-display">
+        <div class="guess-slot" id="suggestion1"></div>
+        <div class="guess-slot" id="suggestion2"></div>
+        <div class="guess-slot" id="suggestion3"></div>
+        <div class="guess-slot" id="suggestion4"></div>
+    </div>
+    
+    <script>
+        const colors = { 'R': 'red', 'G': 'green', 'B': 'blue', 'Y': 'yellow', 'O': 'orange', 'P': 'pink', 'S': 'gray', 'W': 'white' };
+        let currentGuess = [];
+        let possibleCodes = generateAllCodes();
+        
+        function addColor(color) {
+            if (currentGuess.length < 4) {
+                currentGuess.push(color);
+                updateGuessDisplay();
+            }
+        }
+
+        function updateGuessDisplay() {
+            for (let i = 0; i < 4; i++) {
+                let slot = document.getElementById(`slot${i + 1}`);
+                slot.style.backgroundColor = currentGuess[i] ? colors[currentGuess[i]] : 'white';
+            }
+            document.getElementById("guess").value = currentGuess.join('');
+        }
+
+        function updateSuggestionDisplay(code) {
+            for (let i = 0; i < 4; i++) {
+                let slot = document.getElementById(`suggestion${i + 1}`);
+                slot.style.backgroundColor = code ? colors[code[i]] : 'white';
+            }
+        }
+
+        function generateAllCodes() {
+            let codes = [];
+            for (let a of Object.keys(colors)) {
+                for (let b of Object.keys(colors)) {
+                    for (let c of Object.keys(colors)) {
+                        for (let d of Object.keys(colors)) {
+                            codes.push(`${a}${b}${c}${d}`);
+                        }
+                    }
+                }
+            }
+            return codes;
+        }
+
+        function getFeedback(code, guess) {
+            let black = 0, white = 0;
+            let codeArr = [...code];
+            let guessArr = [...guess];
+            let codeUsed = [false, false, false, false];
+            let guessUsed = [false, false, false, false];
+
+            for (let i = 0; i < 4; i++) {
+                if (codeArr[i] === guessArr[i]) {
+                    black++;
+                    codeUsed[i] = true;
+                    guessUsed[i] = true;
+                }
+            }
+
+            for (let i = 0; i < 4; i++) {
+                if (!guessUsed[i]) {
+                    for (let j = 0; j < 4; j++) {
+                        if (!codeUsed[j] && guessArr[i] === codeArr[j]) {
+                            white++;
+                            codeUsed[j] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return { black, white };
+        }
+
+        function processFeedback() {
+            let guess = document.getElementById("guess").value;
+            let black = parseInt(document.getElementById("black").value);
+            let white = parseInt(document.getElementById("white").value);
+
+            if (guess.length !== 4) {
+                alert("Voer een volledige code in!");
+                return;
+            }
+
+            possibleCodes = possibleCodes.filter(code => {
+                let feedback = getFeedback(code, guess);
+                return feedback.black === black && feedback.white === white;
+            });
+
+            let nextGuess = possibleCodes.length ? possibleCodes[0] : "";
+            updateSuggestionDisplay(nextGuess);
+            currentGuess = [];
+            updateGuessDisplay();
+        }
+
+        function resetGame() {
+            currentGuess = [];
+            possibleCodes = generateAllCodes();
+            document.getElementById("black").value = "";
+            document.getElementById("white").value = "";
+            updateSuggestionDisplay("");
+            updateGuessDisplay();
+        }
+    </script>
+</body>
+</html>
