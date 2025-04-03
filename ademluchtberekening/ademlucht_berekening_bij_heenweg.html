@@ -9,12 +9,36 @@
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
+            margin: 0;
+            background-image: url('https://github.com/sanderdedijk/sander/blob/8ce5d6ca37ed0da5584ac4dd03a410dd7b353caa/ademluchtberekening/pictures/brandweer_vuur.jpg?raw=true');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333; /* Zorgt voor voldoende contrast met de achtergrond */
+            
+            display: flex;
+            justify-content: center; /* Horizontaal centreren */
+            align-items: center; /* Verticaal centreren */
+            height: 100vh; /* Zorgt ervoor dat de body de volledige hoogte van het scherm inneemt */
         }
 
+        /* Flexbox container voor de inhoud */
         .container {
-            display: inline-block;
-            text-align: left;
-            width: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Zorgt dat de inhoud van de container bovenaan begint */
+            width: 90%;
+            max-width: 450px;
+            background-color: rgba(255, 255, 255, 0.8); /* Lichte achtergrond om tekst leesbaar te maken */
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #007bff;
+            font-size: 2rem;
+            margin-bottom: 20px; /* Ruimte tussen titel en containerinhoud */
         }
 
         input, button {
@@ -60,6 +84,26 @@
             width: 100%;
             max-width: 600px;
             display: inline-block;
+        }
+
+        /* Media queries voor kleinere schermen */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                width: 95%; /* Grotere breedte voor kleinere schermen */
+                padding: 15px; /* Minder padding */
+            }
+
+            input, button {
+                font-size: 14px; /* Kleinere lettergrootte voor input en buttons */
+            }
+
+            .small-input {
+                width: 80px; /* Kleinere invoervelden op kleinere schermen */
+            }
         }
     </style>
     <script>
@@ -121,8 +165,8 @@
     </script>
 </head>
 <body>
-    <h1>Ademlucht Berekening bij heenweg</h1>
     <div class="container">
+        <h1>Ademlucht Berekening bij heenweg</h1>
         <button onclick="generateBegindruk()">Genereer begindruk</button>
         <div id="begindrukDisplay" class="begindruk-box"></div>
         
