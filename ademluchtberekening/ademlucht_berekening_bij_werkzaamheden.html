@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ademlucht berekening bij werkzaamheden</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            background-image: url('https://github.com/sanderdedijk/sander/blob/8ce5d6ca37ed0da5584ac4dd03a410dd7b353caa/ademluchtberekening/pictures/brandweer_vuur.jpg?raw=true');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 90%;
+            max-width: 450px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #007bff;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            margin: 10px 0;
+            padding: 12px;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .small-input {
+            width: 100px;
+            display: block;
+            margin: 10px auto;
+            text-align: center;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            width: 100%;
+            max-width: 600px;
+            display: inline-block;
+            word-wrap: break-word;
+        }
+
+        .pressure-box {
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #f0f8ff;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+
+            input, button {
+                font-size: 14px;
+            }
+
+            .small-input {
+                width: 80px;
+            }
+        }
+    </style>
+    <script>
+        let begindruk, aankomstdruk;
+        let reservedruk = 55;
+
+        function generateBegindruk() {
+            const min = 180;
+            const max = 303;
+            begindruk = Math.floor(Math.random() * (max - min + 1)) + min;
+            aankomstdruk = Math.floor(begindruk * (0.75 + Math.random() * 0.2));
+
+            document.getElementById("begindrukDisplay").innerHTML = `Begindruk: <strong>${begindruk} BAR</strong>`;
+            document.getElementById("aankomstdrukDisplay").innerHTML = `Aankomstdruk: <strong>${aankomstdruk} BAR</strong>`;
+            document.getElementById("begindrukDisplay").style.display = "block";
+            document.getElementById("aankomstdrukDisplay").style.display = "block";
+            document.getElementById("userInput").value = "";
+            document.getElementById("result").innerHTML = "";
+        }
+
+        function setReservedruk() {
+            const input = parseFloat(document.getElementById("reservedrukInput").value);
+            if (!isNaN(input) && input > 0) {
+                reservedruk = input;
+                alert(`Reservedruk is aangepast naar: ${reservedruk} BAR`);
+            } else {
+                alert("Vul een geldige waarde in voor de reservedruk.");
+            }
+        }
+
+        function checkResult() {
+            const userInput = parseFloat(document.getElementById("userInput").value);
+            if (isNaN(userInput)) {
+                alert("Vul een geldige waarde in.");
+                return;
+            }
+
+            const correcteDruk = (begindruk - aankomstdruk) + reservedruk;
+            const min = correcteDruk - 0.1;
+            const max = correcteDruk * 1.04;
+
+            document.getElementById("result").innerHTML = `De exact berekende terugkeerdruk = <strong>${correcteDruk.toFixed(1)} BAR</strong>`;
+            if (userInput >= min && userInput <= max) {
+                document.getElementById("result").innerHTML += "<br>✅ Goede berekening! Jouw uitkomst ligt binnen +4% van de exacte waarde.";
+            } else {
+                document.getElementById("result").innerHTML += "<br>❌ Helaas, jouw uitkomst is lager of juist te veel hoger dan de exacte berekening. Probeer het nog eens!";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Ademlucht berekening bij werkzaamheden</h1>
+        <button onclick="generateBegindruk()">Genereer begindruk</button>
+        <div id="begindrukDisplay" class="pressure-box"></div>
+        <div id="aankomstdrukDisplay" class="pressure-box"></div>
+        
+        <label>Jouw berekende terugkeerdruk:</label>
+        <input type="text" id="userInput" placeholder="Vul in" class="small-input">
+        <button onclick="checkResult()">Controleer</button>
+        <div id="result" class="result"></div>
+        
+        <br><br>
+        <label>Reservedruk (default: 55 BAR):</label>
+        <input type="text" id="reservedrukInput" value="55" class="small-input">
+        <button onclick="setReservedruk()">Pas reservedruk aan</button>
+    </div>
+</body>
+</html>
