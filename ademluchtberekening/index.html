@@ -16,10 +16,14 @@
             background-attachment: fixed;
         }
 
+        /* Flexbox layout voor de container */
         .container {
-            display: inline-block;
-            text-align: left;
-            width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%; /* Dynamische breedte */
+            max-width: 800px; /* Maximale breedte */
+            margin: 0 auto;
             background-color: rgba(255, 255, 255, 0.8); /* lichte achtergrond om tekst beter leesbaar te maken */
             padding: 20px;
             border-radius: 8px;
@@ -27,6 +31,7 @@
 
         h1 {
             color: #007bff;
+            font-size: 2rem;
         }
 
         .link-box {
@@ -50,6 +55,27 @@
 
         a:hover {
             text-decoration: underline;
+        }
+
+        /* Media query voor kleinere schermen */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem; /* Kleinere lettergrootte op kleinere schermen */
+            }
+
+            .link-box {
+                font-size: 16px; /* Kleinere tekst voor links */
+                padding: 15px; /* Minder padding */
+            }
+
+            a {
+                font-size: 16px; /* Kleinere links */
+            }
+
+            .container {
+                width: 95%; /* Grotere breedte voor kleinere schermen */
+                padding: 15px; /* Minder padding */
+            }
         }
     </style>
 </head>
