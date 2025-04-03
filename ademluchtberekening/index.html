@@ -49,12 +49,12 @@ let begindruk;
 let reservedruk = 55;
 
 function generateBegindruk() {
-  const min = 300 * 0.9; // -10%
+  const min = 300 * 0.6; // -40%
   const max = 300 * 1.01; // +1%
-  const frequentRangeMin = 300 * 0.91; // -9%
+  const frequentRangeMin = 300 * 0.80; // -20%
   const frequentRangeMax = 300 * 0.96; // -4%
 
-  const isFrequent = Math.random() < 0.2; // 20% chance for -4% to -9%
+  const isFrequent = Math.random() < 0.2; // 20% chance for -4% to -20%
   if (isFrequent) {
     begindruk = Math.floor(Math.random() * (frequentRangeMax - frequentRangeMin) + frequentRangeMin);
   } else {
