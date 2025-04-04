@@ -102,28 +102,28 @@
         let reservedruk = 55;
 
         function generateBegindruk() {
-            const min = 180;
-            const max = 303;
-            begindruk = Math.floor(Math.random() * (max - min + 1)) + min;
-            aankomstdruk = Math.floor(begindruk * (0.75 + Math.random() * 0.2));
+    let min, max;
+    
+    if (Math.random() < 0.5) {  
+        // 50% kans op een waarde tussen 270 en 300 BAR
+        min = 270;
+        max = 300;
+    } else {  
+        // 50% kans op een waarde tussen 180 en 303 BAR
+        min = 180;
+        max = 303;
+    }
 
-            document.getElementById("begindrukDisplay").innerHTML = `Begindruk: <strong>${begindruk} BAR</strong>`;
-            document.getElementById("aankomstdrukDisplay").innerHTML = `Aankomstdruk: <strong>${aankomstdruk} BAR</strong>`;
-            document.getElementById("begindrukDisplay").style.display = "block";
-            document.getElementById("aankomstdrukDisplay").style.display = "block";
-            document.getElementById("userInput").value = "";
-            document.getElementById("result").innerHTML = "";
-        }
+    begindruk = Math.floor(Math.random() * (max - min + 1)) + min;
+    aankomstdruk = Math.floor(begindruk * (0.75 + Math.random() * 0.2));
 
-        function setReservedruk() {
-            const input = parseFloat(document.getElementById("reservedrukInput").value);
-            if (!isNaN(input) && input > 0) {
-                reservedruk = input;
-                alert(`Reservedruk is aangepast naar: ${reservedruk} BAR`);
-            } else {
-                alert("Vul een geldige waarde in voor de reservedruk.");
-            }
-        }
+    document.getElementById("begindrukDisplay").innerHTML = `Begindruk: <strong>${begindruk} BAR</strong>`;
+    document.getElementById("aankomstdrukDisplay").innerHTML = `Aankomstdruk: <strong>${aankomstdruk} BAR</strong>`;
+    document.getElementById("begindrukDisplay").style.display = "block";
+    document.getElementById("aankomstdrukDisplay").style.display = "block";
+    document.getElementById("userInput").value = "";
+    document.getElementById("result").innerHTML = "";
+}
 
         function checkResult() {
             const userInput = parseFloat(document.getElementById("userInput").value);
