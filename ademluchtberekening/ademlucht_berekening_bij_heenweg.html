@@ -113,12 +113,14 @@
         let reservedruk = 55;
 
         function generateBegindruk() {
-            const min = 300 * 0.6;
-            const max = 300 * 1.01;
-            const frequentRangeMin = 300 * 0.80;
-            const frequentRangeMax = 300 * 0.96;
+            const min = 270; // minimale begindruk
+            const max = 330; // maximale begindruk
+			
+			//frequent bereik tussen 280 en 298 BAR
+            const frequentRangeMin = 280;
+            const frequentRangeMax = 298;
 
-            const isFrequent = Math.random() < 0.2;
+            const isFrequent = Math.random() < 0.7; // 70% kans op frequent bereik
             if (isFrequent) {
                 begindruk = Math.floor(Math.random() * (frequentRangeMax - frequentRangeMin) + frequentRangeMin);
             } else {
@@ -189,3 +191,4 @@
 </body>
 
 </html>
+
